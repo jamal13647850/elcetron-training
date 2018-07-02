@@ -5,6 +5,8 @@ import url from 'url';
 //const path = require('path');
 import path from 'path';
 
+import electronReload from 'electron-reload';
+electronReload(__dirname);
 app.on('ready', () => {
     let mainWin = new BrowserWindow({width:800,height:600});
     mainWin.loadURL(url.format({
