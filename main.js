@@ -10,23 +10,38 @@ electronReload(__dirname);
 
 import Devtron from 'devtron';
 
+import windowStateKeeper from 'electron-window-state';
 
 app.on('ready', () => {
     Devtron.install();
 
+    let mainWindowState = windowStateKeeper({
+        defaultWidth : 1200,
+        defaultHeight : 600
+    });
+
     //let mainWin = new BrowserWindow({width:800,height:600,show : false});
-    let mainWin = new BrowserWindow({width:1200,height:600,backgroundColor : '#27ae60'});
-    let childwin = new BrowserWindow({width:800,height:600,backgroundColor : '#d35400',parent: mainWin});
+    let mainWin = new BrowserWindow({
+        width:mainWindowState.width,
+        height:mainWindowState.height,
+        x:mainWindowState.x,
+        y:mainWindowState.y,
+        backgroundColor : '#27ae60'
+    });
+
+    mainWindowState.manage(mainWin);
+
+    //let childwin = new BrowserWindow({width:800,height:600,backgroundColor : '#d35400',parent: mainWin});
    /* mainWin.loadURL(url.format({
         pathname : path.join(__dirname,'index.html'),
         protocol : 'file'
     }));*/
     mainWin.loadURL('https://gosafir.com');
-    childwin.loadURL(`file://${__dirname}/index.html`);
+    //childwin.loadURL(`file://${__dirname}/index.html`);
     /*mainWin.once('ready-to-show',()=>{
         mainWin.show();
     })*/
-    childwin.on('blur',()=>{
+    /*childwin.on('blur',()=>{
         console.log("blur");
-    })
+    })*/
 });
