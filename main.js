@@ -68,4 +68,29 @@ app.on('ready', () => {
     /*childwin.on('blur',()=>{
         console.log("blur");
     })*/
+
+
+    let mainContent = mainWin.webContents;
+    mainContent.on('did-finish-load',()=>{
+        console.log('finish load');
+    });
+    mainContent.on('did-start-loading',()=>{
+        console.log('start load');
+    });
+    mainContent.on('dom-ready',()=>{
+        console.log('dom ready');
+    });
+    mainContent.on('new-window',(event,url)=>{
+        event.preventDefault();
+       let win = new BrowserWindow({width:1000,height:1000});
+       win.once('ready-to-show',()=>win.show());
+       win.loadURL(url);
+       event.newGuest = win;
+    });
+    mainContent.on('will-navigate',(event,url)=>{
+        console.log('will navigate');
+    });
+    mainContent.on('did-navigate',(event,url)=>{
+        console.log('did navigate');
+    });
 });
