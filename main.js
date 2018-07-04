@@ -26,18 +26,41 @@ app.on('ready', () => {
         height:mainWindowState.height,
         x:mainWindowState.x,
         y:mainWindowState.y,
+        show:false,
         backgroundColor : '#27ae60'
     });
 
     mainWindowState.manage(mainWin);
 
-    //let childwin = new BrowserWindow({width:800,height:600,backgroundColor : '#d35400',parent: mainWin});
+    let splashScreen = new BrowserWindow({
+        width:500,
+        height:500,
+        backgroundColor : '#d35400',
+        //parent: mainWin,
+        //transparent:true,
+        frame: false
+    });
+
+    mainWin.on('closed',()=>{
+        app.quit();
+        mainWin =null;
+
+    });
+    mainWin.on('closed',()=>{
+        splashScreen = null;
+    });
+
+
+    mainWin.on('ready-to-show',()=>{
+        mainWin.show();
+        splashScreen.close();
+    });
    /* mainWin.loadURL(url.format({
         pathname : path.join(__dirname,'index.html'),
         protocol : 'file'
     }));*/
     mainWin.loadURL('https://gosafir.com');
-    //childwin.loadURL(`file://${__dirname}/index.html`);
+    splashScreen.loadURL(`file://${__dirname}/index.html`);
     /*mainWin.once('ready-to-show',()=>{
         mainWin.show();
     })*/
