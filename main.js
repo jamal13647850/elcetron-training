@@ -27,7 +27,7 @@ app.on('ready', () => {
         x:mainWindowState.x,
         y:mainWindowState.y,
         show:false,
-        backgroundColor : '#27ae60'
+        //backgroundColor : '#27ae60'
     });
 
     mainWindowState.manage(mainWin);
@@ -59,8 +59,9 @@ app.on('ready', () => {
         pathname : path.join(__dirname,'index.html'),
         protocol : 'file'
     }));*/
-    mainWin.loadURL('https://gosafir.com');
-    splashScreen.loadURL(`file://${__dirname}/index.html`);
+    //mainWin.loadURL('https://gosafir.com');
+    mainWin.loadURL(`file://${__dirname}/index.html`);
+    splashScreen.loadURL(`file://${__dirname}/splashScreen.html`);
     /*mainWin.once('ready-to-show',()=>{
         mainWin.show();
     })*/

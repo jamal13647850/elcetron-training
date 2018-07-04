@@ -2,26 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Electron App</title>
+    <title>Edit Text File</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" >
     <style>
-        html , body{
-            height: 100%;
-            overflow: hidden;
-        }
         .container{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100px;
+            margin-top: 20px;
+        }
+        #editor{
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>طراحی وب درساوب</h2>
-    <p>نرم افزار در حال لود شدن است.</p>
-</div>
+    <div class="container">
+        <button class="btn btn-danger" id="openFile">Open</button>
+        <button class="btn btn-success" id="saveFile">Save</button>
+        <br>
+        <textarea id="editor" style="width: 700px;height: 300px;">
 
+        </textarea>
+
+    </div>
+
+    <script>
+        const  {dialog} = require('electron').remote;
+        const  os= require('os');
+        const path = require('path');
+        const fs = require('fs');
+
+        let openBtn = document.getElementById('openFile');
+        openBtn.addEventListener('click',()=>{
+            openFile();
+        });
+
+        let saveBtn = document.getElementById('saveFile');
+        saveBtn.addEventListener('click',()=>{
+            dialog.showSaveDialog({
+                filters : [{name : 'text' , extensions : ['txt']}]
+            },(fileNames)=>{
+                let data = document.getElementById('editor').value;
+                fs.writeFile(fileNames,data,'utf-8',(err)=>{
+                    if(err)  {
+                      dialog.showErrorBox('File save error',err.message);
+                    }
+                    if(err==null)  {
+                        dialog.showMessageBox({
+                            message : "The file has been saved",
+                            buttons : ['ok']
+                        },(response)=>{
+                            console.log(status);
+                        });
+                    }
+                })
+            });
+        });
+
+        const openFile =()=>{
+            dialog.showOpenDialog({
+                filters : [{name : 'text' , extensions : ['txt']}],
+                title : 'باز کردن فایل',
+                buttonLabel : 'باز کن',
+                defaultPath : path.join(os.homedir(),'desktop')
+
+
+            },(fileNames)=>{
+                if(fileNames===undefined) return;
+                let fileName = fileNames[0];
+                fs.readFile(fileName,'utf8',(err,data)=>{
+                    if(err) throw err;
+                    document.getElementById('editor').value = data;
+                });
+            });
+        }
+    </script>
 </body>
 </html>
